@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  <style>
+      *{
+    padding:0;
+    margin:0;
+}
+#mainpage{
+    height:700px;
+    width:70%;
+    border:1px solid transparent;
+    margin:auto;
+    margin-top:50px;
+    justify-content: center;
+    text-align: center;
+}
+#tag{
+    text-align: center;
+}
+#pp{
+    height:40px;
+    width:60%;
+    border:1px solid transparent;
+    margin:auto;
+    font:20px bold;
+    text-align: center;
+    margin-top:20px;
+    color:#a19f9d;
+}
+#fblogin{
+    width:40%;
+    height:30px;
+    border:1px solid transparent;
+    background-color:#3897f1 ;
+    color:white;
+    display:flex;
+    gap:20px;
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+   padding-top:10px;
+    margin-top: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+#img{
+    height:20px;
+
+}
+#Register{
+    margin:auto;
+    justify-items: center;
+}
+#or{
+    margin-top: 10px;
+    color:#a19f9d;
+}
+#input{
+    border:1px solid transparent;
+    height:150px;
+    width:350px;
+    justify-content: center;
+    margin: auto;
+    line-height: 60px;
+}
+.id{
+    height:20px;
+    width:250px;
+    border-radius: 3px;
+    text-align: center;
+}
+.submit{
+    width:160px;
+    height:30px;
+    color:white;
+    background-color: #4f62d7;
+    
+}
+
+  </style>
+   
+</head>
+<body>
+    <div id="navbar"></div>
+    <div id="mainpage">
+        <div id="Register">
+            <h1 id="tag">Movies App</h1>
+            <div id="pp"><p>Sign Up to see movies and series with your friends</p></div>
+            <div id="fblogin"><img  id="img" src="https://tse2.mm.bing.net/th?id=OIP.tozpIBHbVCdArjene99JiAD5D6&pid=Api&P=0&w=167&h=167" alt="">
+            <p>Login with Facebook</p></div>
+            <h3 id="or">OR</h3>
+            <div id="input">
+                <form onsubmit="login(event)">
+                   
+                    <input type="text" id="username_log" class="id" placeholder="  User-Name">
+                    <input type="password" id="password_log" class="id" placeholder="password">
+                   
+                    <input type="submit" class="submit" >
+                </form>
+
+
+            </div>
+        </div>
+</body>
+</html>
+<script>
+    async function login(e)
+{
+   try{
+    e.preventDefault();
+    var log_data = {
+        username:document.getElementById("username_log").value,
+        password:document.getElementById("password_log").value
+    }
+
+    log_data=JSON.stringify(log_data);
+   }
+
+   catch(err)
+   {
+
+       console.log(err);
+       
+   }
+
+   let login_api=`https://masai-api-mocker.herokuapp.com/auth/login`;
+   let responce =await fetch(login_api,{
+       method:"POST",
+       body:log_data,
+       headers:{
+           "Content-Type":"application/json",
+       },
+   })
+   let data = await responce.json();
+   console.log(data);
+   let user= document.getElementById("username_log").value;
+   let tok = data.token;
+   getuser(user,tok);
+   if(data=true)
+   {
+       alert("Login Sucess");
+       setTimeout(()=>{
+           window.location.href="landing.html"
+
+       },2000)
+      
+   }
+   async function getuser(use,toke)
+   {
+      try{
+        let user_api =`https://masai-api-mocker.herokuapp.com/user/${use}`;
+    
+        let repo = await fetch(user_api,{
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${toke}`,
+            },
+           
+        });
+        let deto = await repo.json();
+        console.log(deto);
+
+        
+        
+        
+      }
+      catch(err)
+      {
+          console.log(err);
+      }
+   }
+}
+
+
+
+
+</script>
